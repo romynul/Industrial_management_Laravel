@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Clients;
+use App\Logs;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ClientRequest;
 
 class ClientController extends Controller
 {
@@ -13,7 +16,8 @@ class ClientController extends Controller
      */
     public function index(Request $req)
     {
-       return view('client.index');
+       $clientList = Clients::all(); 
+         return view('client.index',['client'=> $clientList]);
     }
 
     /**
@@ -25,9 +29,24 @@ class ClientController extends Controller
         return view('client.add_client');
     }
 
-    public function create()
+    public function create(ClientRequest $req)
     {
-        //
+         $clients = new Clients();
+     
+        $clients->cname = $req->cname;
+        $clients->cowner = $req->cowner;
+        $clients->address = $req->address;
+        $clients->contact = $req->contact;
+        $clients->details = $req->details;
+        $clients->balance = 0;
+        $clients->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->cname.' Client Added';
+        $log->save();
+
+        return redirect()->route('dashboard.client');
     }
 
     /**
@@ -49,7 +68,8 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        
+         $clientList = Clients::all(); 
+         return view('client.index',['client'=> $clientList]);
        
     }
 
@@ -61,8 +81,8 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        $std = Products::find($id);
-        return view('client.edit_client', ['std'=>$std]);
+        $client = Clients::find($id);
+        return view('client.edit_client', ['client'=>$client]);
     }
 
     /**
@@ -72,17 +92,24 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
        
-        $products = Products::find($id);
+       $client = Clients::find($id);
 
-        $products->p_name = $req->pname;
-        $products->p_quantity = $req->pquantity;
-        $products->p_price = $req->pprice;
-        $products->save();
+        $client->cname = $req->cname;
+        $client->cowner = $req->cowner;
+        $client->address = $req->address;
+        $client->contact = $req->contact;
+        
+        $client->save();
 
-        return redirect()->route('client.index');
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->cname.' client Information update';
+        $log->save();
+
+        return redirect()->route('dashboard.client');
     }
 
     /**
@@ -95,15 +122,19 @@ class ClientController extends Controller
 
     public function delete($id){
 
-        $std = Products::find($id);
-        return view('client.delete', ['std'=>$std]);
+        $client = Clients::find($id);
+        return view('client.delete_client', ['client'=>$client]);
     }
 
 
 
     public function destroy($id)
     {
-        Products::destroy($id);
-        return redirect()->route('client.index');
+         Clients::destroy($id);
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $id.' id client Information Deleted';
+        $log->save();
+        return redirect()->route('dashboard.client');
     }
 }

@@ -1,4 +1,4 @@
-@extends ('layout.manager')
+@extends ('layout.main')
 
 @section('index-content')
 
@@ -38,8 +38,8 @@
                           <td>{{$value['type']}}</td>
                           <td>{{$value['esalary']}}</td>
                           <td>
-                            <a href="{{route('manager.edit_employee', $value['eid'])}}" class="btn btn-primary">Edit</a> 
-                            <a href="{{route('manager.delete_employee', $value['eid'])}}" class="btn btn-primary">Delete</a> 
+                            <a href="{{route('dashboard.edit_employee', $value['eid'])}}" class="btn btn-primary">Edit</a> 
+                            <a href="{{route('dashboard.delete_employee', $value['eid'])}}" class="btn btn-primary">Delete</a> 
                             
                           </td>
                         </tr>

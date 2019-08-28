@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Logs;
+use App\Users;
+use Session;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -14,6 +18,24 @@ class dashboardController extends Controller
     public function index(Request $req)
     {
        return view('dashboard.index');
+    }
+
+
+
+    public function logs(Request $req)
+    {
+        $logs = DB::table('logs')->orderBy('action_time', 'desc')->get();
+         return view('logs.index',['logs'=> $logs]);
+
+        
+    }
+
+    public function profile(Request $req)
+    {
+        $user = Users::where('eid', '=', '1')->get();
+        return view('dashboard.profilee', ['user'=>$user]);
+
+        
     }
 
     /**

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Expenses;
+use App\Logs;
+
 use Illuminate\Http\Request;
+use App\Http\Requests\ExpenseRequest;
 
 class ExpenseController extends Controller
 {
@@ -13,7 +17,8 @@ class ExpenseController extends Controller
      */
     public function index(Request $req)
     {
-       return view('expense.index');
+       $expense = Expenses::all();
+        return view('expense.index', ['expense'=> $expense]);
     }
 
     /**
@@ -25,9 +30,21 @@ class ExpenseController extends Controller
         return view('expense.add_expense');
     }
 
-    public function create()
+    public function create(ExpenseRequest $req)
     {
-        //
+        $expense = new Expenses();
+        $expense->purpose = $req->purpose;
+        $expense->details = $req->details;
+        $expense->amount = $req->expenseAmount;
+        $expense->edate = date('Y-m-d H:i:s');
+        $expense->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->purpose.' purpose expense Added';
+        $log->save();
+
+        return redirect()->route('dashboard.expense');
     }
 
     /**
@@ -61,8 +78,8 @@ class ExpenseController extends Controller
      */
     public function edit($id)
     {
-        $std = Products::find($id);
-        return view('expense.edit_expense', ['std'=>$std]);
+         $expense = Expenses::find($id);
+        return view('expense.edit_expense', ['expense'=>$expense]);
     }
 
     /**
@@ -72,17 +89,22 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
        
-        $products = Products::find($id);
+         
+        $expense = Expenses::find($id);
+        $expense->purpose = $req->purpose;
+        $expense->details = $req->details;
+        $expense->amount = $req->expenseAmount;
+        $expense->save();
 
-        $products->p_name = $req->pname;
-        $products->p_quantity = $req->pquantity;
-        $products->p_price = $req->pprice;
-        $products->save();
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->cname.' expense Information update';
+        $log->save();
 
-        return redirect()->route('expense.index');
+        return redirect()->route('dashboard.expense');
     }
 
     /**
@@ -95,15 +117,21 @@ class ExpenseController extends Controller
 
     public function delete($id){
 
-        $std = Products::find($id);
-        return view('expense.delete', ['std'=>$std]);
+        $expense = Expenses::find($id);
+        return view('expense.delete_expense', ['expense'=>$expense]);
+       
     }
 
 
 
     public function destroy($id)
     {
-        Products::destroy($id);
-        return redirect()->route('expense.index');
+        Expenses::destroy($id);
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $id.' id expense Information Deleted';
+        $log->save();
+        
+        return redirect()->route('dashboard.expense');
     }
 }

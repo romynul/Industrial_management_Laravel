@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Projects;
+use App\Logs;
+use App\SoldHistory;
+use App\Http\Requests\ProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -13,7 +17,8 @@ class ProjectController extends Controller
      */
     public function index(Request $req)
     {
-       return view('project.index');
+        $projectList = Projects::all();
+        return view('project.index', ['project'=> $projectList]);
     }
 
     /**
@@ -25,9 +30,26 @@ class ProjectController extends Controller
         return view('project.add_project');
     }
 
-    public function create()
+    public function create(ProjectRequest $req)
     {
-        //
+       $projects = new Projects();
+     
+        $projects->pname = $req->pname;
+        $projects->client = $req->client;
+        
+        $projects->tcost = $req->tcost;
+        $projects->paid = $req->paid;
+        $projects->ecost = $req->ecost;
+        $projects->details = $req->details;
+        $projects->status = "running";
+        $projects->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->pname.' project added';
+        $log->save();
+
+         return redirect()->route('dashboard.project');
     }
 
     /**
@@ -61,8 +83,8 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $std = Products::find($id);
-        return view('project.edit_project', ['std'=>$std]);
+        $project = Projects::find($id);
+        return view('project.edit_project', ['project'=>$project]);
     }
 
     /**
@@ -72,17 +94,43 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
        
-        $products = Products::find($id);
+        $projects = Projects::find($id);
 
-        $products->p_name = $req->pname;
-        $products->p_quantity = $req->pquantity;
-        $products->p_price = $req->pprice;
-        $products->save();
+        $projects->pname = $req->pname;
+        $projects->client = $req->client;
+        $projects->tcost = $req->tcost;
+        $projects->paid = $req->paid;
+        $projects->status = $req->status;
+        $projects->save();
 
-        return redirect()->route('project.index');
+        if($projects->status=="completed")
+        {
+        $sold = new SoldHistory();
+        
+        $sold->pid = $id;
+        $sold->pname = $req->pname;
+        $sold->tcost = $req->tcost;
+        $sold->ecost = $req->ecost;
+        $sold->profit = $req->tcost-$req->ecost;
+        
+        $sold->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->pname.' project mark as completed';
+        $log->save();
+
+        }
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->pname.' project info updated';
+        $log->save();
+
+        return redirect()->route('dashboard.project');
     }
 
     /**
@@ -95,15 +143,21 @@ class ProjectController extends Controller
 
     public function delete($id){
 
-        $std = Products::find($id);
-        return view('project.delete', ['std'=>$std]);
+       $project = Projects::find($id);
+        return view('project.delete_project', ['project'=>$project]);
     }
 
 
 
     public function destroy($id)
     {
-        Products::destroy($id);
-        return redirect()->route('project.index');
+        Projects::destroy($id);
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $id .' project deleted';
+        $log->save();
+
+        return redirect()->route('dashboard.project');
     }
 }

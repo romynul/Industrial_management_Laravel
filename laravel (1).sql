@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 24, 2019 at 05:15 PM
+-- Generation Time: Aug 28, 2019 at 03:42 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.2.3
 
@@ -70,7 +70,8 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`cid`, `cname`, `cowner`, `contact`, `address`, `details`, `balance`) VALUES
-(1, 'SUANTOR', 'Aiub', '0177744', 'Kuril, Bishoroad', 'qwerty', 0);
+(1, 'SUANTOR', 'Aiub', '0177744', 'Kuril, Bishoroad', 'qwerty', 0),
+(2, 'Mosiur', 'Dream', '01716454642', 'Naogaon', 'No Project Added', 0);
 
 -- --------------------------------------------------------
 
@@ -130,6 +131,25 @@ CREATE TABLE `logs` (
   `action_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `logs` (`id`, `employee`, `action`, `action_time`) VALUES
+(1, 'rhshuvo97@gmail.com', 'Mosiur Client Added', '2019-08-26 13:51:00'),
+(2, 'rhshuvo97@gmail.com', 'Rofiq Client Added', '2019-08-26 14:04:42'),
+(3, 'rhshuvo97@gmail.com', 'Mosiur client Information updated', '2019-08-26 15:41:12'),
+(4, 'rhshuvo97@gmail.com', ' Employee Added', '2019-08-27 06:15:54'),
+(5, 'rhshuvo97@gmail.com', ' expense Information update', '2019-08-27 06:16:27'),
+(6, 'rhshuvo97@gmail.com', '3 id expense Information Deleted', '2019-08-27 06:16:55'),
+(7, 'rhshuvo97@gmail.com', 'musrat doll project added', '2019-08-27 07:36:51'),
+(8, 'rhshuvo97@gmail.com', 'musrat doll project mark as completed', '2019-08-27 08:45:18'),
+(9, 'rhshuvo97@gmail.com', 'musrat doll project info updated', '2019-08-27 08:45:18'),
+(10, 'rhshuvo97@gmail.com', '5 project deleted', '2019-08-27 08:47:28'),
+(11, 'rhshuvo97@gmail.com', 'Mushu supplier added', '2019-08-27 08:57:26'),
+(12, 'rhshuvo97@gmail.com', 'Mushu supplier info updated', '2019-08-27 08:57:42'),
+(13, 'rhshuvo97@gmail.com', '2 id supplier deleted', '2019-08-27 08:57:48');
+
 -- --------------------------------------------------------
 
 --
@@ -154,7 +174,30 @@ CREATE TABLE `projects` (
 INSERT INTO `projects` (`pid`, `pname`, `client`, `tcost`, `paid`, `ecost`, `details`, `status`) VALUES
 (2, 'Bangla Bari', 'qwee', 2000, 100, 0, 'qwe', 'completed'),
 (3, 'Project1', 'asd', 10000, 3000, 0, 'qwertyuiop', 'running'),
-(5, 'Project3', 'jamir01', 10000, 3000, 7000, 'aqwsdf', 'running');
+(6, 'musrat doll', 'mushu', 2000, 1500, 1400, 'We see later', 'completed');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `soldhistory`
+--
+
+CREATE TABLE `soldhistory` (
+  `id` int(11) NOT NULL,
+  `pid` int(11) NOT NULL,
+  `pname` varchar(50) NOT NULL,
+  `tcost` int(11) NOT NULL,
+  `ecost` int(11) NOT NULL,
+  `profit` int(11) NOT NULL,
+  `sdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `soldhistory`
+--
+
+INSERT INTO `soldhistory` (`id`, `pid`, `pname`, `tcost`, `ecost`, `profit`, `sdate`) VALUES
+(1, 6, 'musrat doll', 2000, 1400, 600, '2019-08-27 08:45:18');
 
 -- --------------------------------------------------------
 
@@ -203,7 +246,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`eid`, `email`, `password`, `ename`, `address`, `contact`, `type`, `esalary`) VALUES
 (1, 'rhshuvo97@gmail.com', '1234', 'Romynul Shuvo', 'Mohammadpur, Dhaka', '01766881646', 'admin', 120001),
-(2, 'wahidnj@gmail.com', '123', 'wahid', 'Kuril, Bishoroad', '01777403766', 'Manager', 82000);
+(2, 'wahidnj@gmail.com', '123', 'wahid', 'Kuril, Bishoroad', '01777403765', 'manager', 82000);
 
 --
 -- Indexes for dumped tables
@@ -246,6 +289,12 @@ ALTER TABLE `projects`
   ADD PRIMARY KEY (`pid`);
 
 --
+-- Indexes for table `soldhistory`
+--
+ALTER TABLE `soldhistory`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `suppliers`
 --
 ALTER TABLE `suppliers`
@@ -271,43 +320,49 @@ ALTER TABLE `bonus`
 -- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `cid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `eid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `eid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `labours`
 --
 ALTER TABLE `labours`
-  MODIFY `lid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `lid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `pid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `pid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `soldhistory`
+--
+ALTER TABLE `soldhistory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `sid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `sid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `eid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `eid` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

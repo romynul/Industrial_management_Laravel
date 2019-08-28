@@ -1,4 +1,4 @@
-@extends ('layout.mainAccountant')
+@extends ('layout.main')
 
 @section('index-content')
 
@@ -25,22 +25,22 @@
                         <th>Expertise</th>
                         <th>Salary</th>
                         <th>Action</th>
-                      </tr>
+                        </tr>
                         @foreach($labour as $value)
-    <tr>
-      <td>{{$value['lid']}}</td>
-      <td>{{$value['lname']}}</td>
-      <td>{{$value['laddress']}}</td>
-      <td>{{$value['lcontact']}}</td>
-      <td>{{$value['expertise']}}</td>
-      <td>{{$value['salary']}}</td>
+                          <tr>
+                            <td>{{$value['lid']}}</td>
+                            <td>{{$value['lname']}}</td>
+                            <td>{{$value['laddress']}}</td>
+                            <td>{{$value['lcontact']}}</td>
+                            <td>{{$value['expertise']}}</td>
+                            <td>{{$value['salary']}}</td>
 
-      <td>
-        <a href="{{route('accountant.edit_labour', $value['lid'])}}">Edit</a> |
-        <a href="{{route('accountant.delete_labour', $value['lid'])}}">Delete</a> 
-      </td>
-    </tr>
-    @endforeach
+                            <td>
+                              <a href="{{route('dashboard.edit_labour', $value['lid'])}}">Edit</a> |
+                              <a href="{{route('dashboard.delete_labour', $value['lid'])}}">Delete</a> 
+                            </td>
+                          </tr>
+                        @endforeach
                     </table>
                   </div>
                 </div>

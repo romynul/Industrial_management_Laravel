@@ -33,7 +33,7 @@
         </form>
       
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-            <img alt="image" src="img/avatar/avatar-1.png" class="rounded-circle mr-1">
+            <img alt="image" src="{{ url('/stisla/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
             <div class="d-sm-none d-lg-inline-block">Hi, RS</div></a>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="dropdown-title">Logged in 5 min ago</div>
@@ -55,14 +55,15 @@
         </ul>
       </nav>
 
-
-     <div class="main-sidebar">
+       
+    @if(session('type') == 'admin'){
+        <div class="main-sidebar">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             <a href="/dashboard">Industrial Management</a>
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
-            <a href="/dashboard">St</a>
+            <a href="/dashboard">IMS</a>
           </div>
 
           <ul class="sidebar-menu">
@@ -128,6 +129,82 @@
             </div>
         </aside>
       </div>
+    }
+    @else if(session('type') == "manager"){
+        <div class="main-sidebar">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+            <a href="/dashboard">Industrial Management</a>
+          </div>
+          <div class="sidebar-brand sidebar-brand-sm">
+            <a href="/dashboard">IMS</a>
+          </div>
+
+          <ul class="sidebar-menu">
+              <li class="menu-header">Admin</li>
+              <li class="nav-item dropdown active">
+                <a href="/dashboard" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+              </li>
+              <li class="menu-header">Menu</li>
+              <li class="nav-item dropdown">
+                <a href="{{route('dashboard.employee')}}" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user-tie"></i> <span>Employee</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('dashboard.add_employee')}}">Add Employee</a></li>
+                  <li><a class="nav-link" href="{{route('dashboard.employee')}}">Employee List</a></li>
+                </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a href="{{route('dashboard.labour')}}" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-people-carry"></i> <span>Labour</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('dashboard.add_labour')}}">Add Labour</a></li>
+                  <li><a class="nav-link" href="{{route('dashboard.labour')}}">Labour List</a></li>
+                </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a href="{{route('dashboard.supplier')}}" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-truck-moving"></i> <span>Supplier</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('dashboard.add_supplier')}}">Add Supplier</a></li>
+                  <li><a class="nav-link" href="{{route('dashboard.supplier')}}">Supplier List</a></li>
+                </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a href="{{route('dashboard.client')}}" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user-secret"></i> <span>Client</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('dashboard.add_client')}}">Add Client</a></li>
+                  <li><a class="nav-link" href="{{route('dashboard.client')}}">Client List</a></li>
+                </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a href="{{route('dashboard.project')}}" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fab fa-r-project"></i> <span>Project</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('dashboard.add_project')}}">Add Project</a></li>
+                  
+                </ul>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a href="{{route('dashboard.expense')}}" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fab fa-r-project"></i> <span>Expense</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('dashboard.add_expense')}}">Add Expense</a></li>
+                  
+                </ul>
+              </li>
+
+             
+        
+            <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+              <a href="/logout" class="btn btn-primary btn-lg btn-block btn-icon-split">
+                <i class="fas fa-rocket"></i> Logout
+              </a>
+            </div>
+        </aside>
+      </div>}
+    @endif 
+     
 
 
     @yield('index-content')

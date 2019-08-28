@@ -1,4 +1,4 @@
-@extends ('layout.mainAccountant')
+@extends ('layout.main')
 
 @section('index-content')
 
@@ -35,8 +35,8 @@
       <td>{{$value['amount']}}</td>
 
       <td>
-        <a href="{{route('accountant.edit_expense', $value['eid'])}}">Edit</a> |
-        <a href="{{route('accountant.delete_expense', $value['eid'])}}">Delete</a> 
+        <a href="{{route('dashboard.edit_expense', $value['eid'])}}">Edit</a> |
+        <a href="{{route('dashboard.delete_expense', $value['eid'])}}">Delete</a> 
       </td>
     </tr>
     @endforeach 

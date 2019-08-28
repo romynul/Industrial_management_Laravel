@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Users;
+use App\Logs;
+
 use Illuminate\Http\Request;
+use App\Http\Requests\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
@@ -13,7 +17,8 @@ class EmployeeController extends Controller
      */
     public function index(Request $req)
     {
-       return view('employee.index');
+       $userList = Users::all();
+        return view('employee.index', ['user'=> $userList]);
     }
 
     /**
@@ -25,9 +30,27 @@ class EmployeeController extends Controller
         return view('employee.add_employee');
     }
 
-    public function create()
+    public function create(EmployeeRequest $req)
     {
-        //
+        $users = new Users();
+     
+        $users->ename = $req->ename;
+        $users->email = $req->email;
+        $users->password = $req->password;
+        $users->address = $req->address;
+        $users->contact = $req->contact;
+        $users->type = $req->type;
+        $users->esalary = $req->esalary;
+   
+        
+        $users->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->cname.' Employee Added';
+        $log->save();
+
+        return redirect()->route('dashboard.employee');
     }
 
     /**
@@ -61,8 +84,8 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        $std = Products::find($id);
-        return view('employee.edit_employee', ['std'=>$std]);
+         $user = Users::find($id);
+        return view('employee.edit_employee', ['user'=>$user]);
     }
 
     /**
@@ -72,17 +95,26 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
        
-        $products = Products::find($id);
+         $user = Users::find($id);
 
-        $products->p_name = $req->pname;
-        $products->p_quantity = $req->pquantity;
-        $products->p_price = $req->pprice;
-        $products->save();
+        $user->email = $req->email;
+        $user->ename = $req->ename;
+        $user->contact = $req->contact;
+        $user->address = $req->address;
+        $user->esalary = $req->esalary;
+        
+   
+        $user->save();
 
-        return redirect()->route('employee.index');
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->cname.' Employee Information update';
+        $log->save();
+
+        return redirect()->route('dashboard.employee');
     }
 
     /**
@@ -95,15 +127,21 @@ class EmployeeController extends Controller
 
     public function delete($id){
 
-        $std = Products::find($id);
-        return view('employee.delete', ['std'=>$std]);
+        $user = Users::find($id);
+        return view('employee.delete_employee', ['user'=>$user]);
+       
     }
 
 
 
     public function destroy($id)
     {
-        Products::destroy($id);
-        return redirect()->route('employee.index');
+        Users::destroy($id);
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $id.' id Employee Information Deleted';
+        $log->save();
+        
+        return redirect()->route('dashboard.employee');
     }
 }

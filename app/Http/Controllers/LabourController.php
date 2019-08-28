@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Labours;
+use App\Logs;
 use Illuminate\Http\Request;
+use App\Http\Requests\LabourRequest;
 
 class LabourController extends Controller
 {
@@ -13,7 +15,8 @@ class LabourController extends Controller
      */
     public function index(Request $req)
     {
-       return view('labour.index');
+        $labourList = Labours::all();
+        return view('labour.index', ['labour'=> $labourList]);
     }
 
     /**
@@ -25,9 +28,22 @@ class LabourController extends Controller
         return view('labour.add_labour');
     }
 
-    public function create()
+    public function create(LabourRequest $req)
     {
-        //
+       $labour = new Labours();
+        $labour->lname = $req->labourName;
+        $labour->laddress = $req->labourAddress;
+        $labour->lcontact = $req->labourContact;
+        $labour->expertise = $req->labourExperties;
+        $labour->salary = $req->labourSalary;
+        $labour->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->labourName.' labour Added';
+        $log->save();
+
+        return redirect()->route('dashboard.labour');
     }
 
     /**
@@ -61,8 +77,8 @@ class LabourController extends Controller
      */
     public function edit($id)
     {
-        $std = Products::find($id);
-        return view('labour.edit_labour', ['std'=>$std]);
+        $labour = Labours::find($id);
+        return view('labour.edit_labour', ['labour'=>$labour]);
     }
 
     /**
@@ -72,17 +88,24 @@ class LabourController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LabourRequest $req, $id)
     {
        
-        $products = Products::find($id);
+        $labour = Labours::find($id);
 
-        $products->p_name = $req->pname;
-        $products->p_quantity = $req->pquantity;
-        $products->p_price = $req->pprice;
-        $products->save();
+        $labour->lname = $req->labourName;
+        $labour->laddress = $req->labourAddress;
+        $labour->lcontact = $req->labourContact;
+        $labour->expertise = $req->labourExperties;
+        $labour->salary = $req->labourSalary;
+        $labour->save();
 
-        return redirect()->route('labour.index');
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->labourName.' labour information Updated';
+        $log->save();
+
+       return redirect()->route('dashboard.labour');
     }
 
     /**
@@ -94,16 +117,22 @@ class LabourController extends Controller
 
 
     public function delete($id){
-
-        $std = Products::find($id);
-        return view('labour.delete', ['std'=>$std]);
+        $labour = Labours::find($id);
+        return view('labour.delete_labour', ['labour'=>$labour]);
+       
     }
 
 
 
     public function destroy($id)
     {
-        Products::destroy($id);
-        return redirect()->route('labour.index');
+        labours::destroy($id);
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $id.' labour info deleted';
+        $log->save();
+
+        return redirect()->route('dashboard.labour');
     }
 }

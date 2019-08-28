@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Suppliers;
+use App\Logs;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\SupplierRequest;
 
 class SupplierController extends Controller
 {
@@ -13,7 +16,8 @@ class SupplierController extends Controller
      */
     public function index(Request $req)
     {
-       return view('supplier.index');
+        $supplierList = Suppliers::all();
+        return view('supplier.index', ['supplier'=> $supplierList]);
     }
 
     /**
@@ -25,9 +29,25 @@ class SupplierController extends Controller
         return view('supplier.add_supplier');
     }
 
-    public function create()
+    public function create(SupplierRequest $req)
     {
-        //
+        $suppliers = new Suppliers();
+     
+        $suppliers->sname = $req->sname;
+        $suppliers->cowner = $req->cowner;
+        $suppliers->address = $req->address;
+        $suppliers->contact = $req->contact;
+        $suppliers->details = $req->details;
+        $suppliers->tbuy = 0;
+        $suppliers->balance = 0;
+        $suppliers->save();
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->sname.' supplier added';
+        $log->save();
+
+        return redirect()->route('dashboard.supplier');
     }
 
     /**
@@ -61,8 +81,8 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $std = Products::find($id);
-        return view('supplier.edit_supplier', ['std'=>$std]);
+        $supplier = Suppliers::find($id);
+        return view('supplier.edit_supplier', ['supplier'=>$supplier]);
     }
 
     /**
@@ -72,17 +92,24 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
        
-        $products = Products::find($id);
+        $supplier = Suppliers::find($id);
 
-        $products->p_name = $req->pname;
-        $products->p_quantity = $req->pquantity;
-        $products->p_price = $req->pprice;
-        $products->save();
+        $supplier->sname = $req->sname;
+        $supplier->cowner = $req->cowner;
+        $supplier->address = $req->address;
+        $supplier->contact = $req->contact;
+        $supplier->save();
 
-        return redirect()->route('supplier.index');
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $req->sname.' supplier info updated';
+        $log->save();
+
+        return redirect()->route('dashboard.supplier');
+
     }
 
     /**
@@ -95,15 +122,20 @@ class SupplierController extends Controller
 
     public function delete($id){
 
-        $std = Products::find($id);
-        return view('supplier.delete', ['std'=>$std]);
+         $supplier = Suppliers::find($id);
+        return view('supplier.delete_supplier', ['supplier'=>$supplier]);
     }
 
 
 
     public function destroy($id)
     {
-        Products::destroy($id);
-        return redirect()->route('supplier.index');
+        Suppliers::destroy($id);
+
+        $log = new Logs();
+        $log->employee = session('user');
+        $log->action = $id.' id supplier deleted';
+        $log->save();
+        return redirect()->route('dashboard.supplier');
     }
 }

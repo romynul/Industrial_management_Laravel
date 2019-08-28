@@ -1,4 +1,4 @@
-@extends ('layout.manager')
+@extends ('layout.main')
 
 @section('index-content')
 
@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
             <div class="login-brand">
-              <img src="../img/stisla-fill.svg" alt="logo" width="100" class="shadow-light rounded-circle">
+              <img src="{{ url('/stisla/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
             </div>
 
             <div class="card card-primary">
@@ -17,7 +17,7 @@
               
 
               <div class="card-body">
-                <form onsubmit="validate()" method="POST">
+                <form method="POST">
                     {{csrf_field()}}
                  <div class="form-group">
                     <label>Employee ID:</label>
@@ -85,34 +85,4 @@
   </div>
 
  @stop
-  <script type="text/javascript">
-    
-    function validate()
-    {
-      var userName = document.getElementById("userName");
-      var email = document.getElementById("email");
-      var regexName =  /^[a-zA-Z ]{2,30}$/;
-      var regexEmail =   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-      if(regexName.test(userName.value))
-      {
-        
-      }
-      else{
-        alert("Please give valid name.....");
-      }
-
-      if(regexEmail.test(email.value))
-      {
-        
-      }
-      else{
-        alert("Please give valid email.....");
-      }
-
-
-
-
-    }
-  </script>
-
+ 

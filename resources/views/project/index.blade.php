@@ -1,4 +1,4 @@
-@extends ('layout.manager')
+@extends ('layout.main')
 
 @section('index-content')
 
@@ -41,8 +41,8 @@
                           <td>{{$value['status']}}</td>
                           
                           <td>
-                            <a href="{{route('manager.edit_project', $value['pid'])}}" class="btn btn-primary">Edit</a> 
-                            <a href="{{route('manager.delete_project', $value['pid'])}}" class="btn btn-primary">Delete</a> 
+                            <a href="{{route('dashboard.edit_project', $value['pid'])}}" class="btn btn-primary">Edit</a> 
+                            <a href="{{route('dashboard.delete_project', $value['pid'])}}" class="btn btn-primary">Delete</a> 
                             
                           </td>
                         </tr>

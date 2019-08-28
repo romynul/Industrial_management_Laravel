@@ -8,8 +8,8 @@ class SoldHistory extends Model
 {
     //
 
-    protected $table = "sold";
-    protected $primaryKey = 'serialno';
+    protected $table = "soldhistory";
+    protected $primaryKey = 'id';
 	public $timestamps = false;
 
 	const CREATED_AT = 'creation_date';

@@ -1,4 +1,4 @@
-@extends ('layout.manager')
+@extends ('layout.main')
 
 @section('index-content')
 
@@ -39,8 +39,8 @@
                           <td>{{$value['tbuy']}}</td>
                           <td>{{$value['balance']}}</td>
                           <td>
-                            <a href="{{route('manager.edit_supplier', $value['sid'])}}" class="btn btn-primary">Edit</a> 
-                            <a href="{{route('manager.delete_supplier', $value['sid'])}}" class="btn btn-primary">Delete</a> 
+                            <a href="{{route('dashboard.edit_supplier', $value['sid'])}}" class="btn btn-primary">Edit</a> 
+                            <a href="{{route('dashboard.delete_supplier', $value['sid'])}}" class="btn btn-primary">Delete</a> 
                             
                           </td>
                         </tr>

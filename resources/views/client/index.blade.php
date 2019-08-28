@@ -1,10 +1,12 @@
-@extends ('layout.manager')
+@extends ('layout.main')
 
 @section('index-content')
-
+      
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
+           
+            
           <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -36,8 +38,8 @@
                           <td>{{$value['details']}}</td>
                           <td>{{$value['balance']}}</td>
                           <td>
-                            <a href="{{route('manager.edit_client', $value['cid'])}}" class="btn btn-primary">Edit</a> 
-                            <a href="{{route('manager.delete_client', $value['cid'])}}" class="btn btn-primary">Delete</a> 
+                            <a href="{{route('dashboard.edit_client', $value['cid'])}}" class="btn btn-primary">Edit</a> 
+                            <a href="{{route('dashboard.delete_client', $value['cid'])}}" class="btn btn-primary">Delete</a> 
                             
                           </td>
                         </tr>
@@ -52,4 +54,5 @@
             </div>
           </section>
         </div>
+
     @stop

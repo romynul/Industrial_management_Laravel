@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentRequest extends FormRequest
+class ExpenseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,8 +19,8 @@ class StudentRequest extends FormRequest
     public function messages(){
 
         return [
-            'uname.required' => ':attribute testing message',
-            'uname.unique' => ':attribute testing message2'
+            'purpose.required' => ':attribute testing message'
+            
         ];
     }
 
@@ -33,11 +33,11 @@ class StudentRequest extends FormRequest
     {
         return [
 
-            "uname"     => "required | unique:employee,username",
-            "password"  => "required|min:8",
-            "name"      => "required",
-            "contact"      => "required"
-           
+             "purpose"     => "required",
+            "details"  => "required",
+            "expenseAmount"      => "required",
+            
+            //
         ];
     }
 }
